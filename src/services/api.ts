@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = "https://tea-rater-api-9687118a646c.herokuapp.com";
 
 export const loginUser = async (username: string) => {
   return axios.post(`${API_BASE_URL}/login`, { username });
