@@ -52,3 +52,9 @@ export default tseslint.config({
   },
 })
 ```
+
+Run locally
+`npm run dev`
+
+Deploy to Vercel
+`git push`
