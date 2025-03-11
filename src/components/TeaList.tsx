@@ -7,12 +7,16 @@ interface Tea {
   provider: string;
 }
 
-const TeaList: React.FC = () => {
+interface TeaListProps {
+  userId: number;
+}
+
+const TeaList: React.FC<TeaListProps> = ({ userId }) => {
   const [teaList, setTeaList] = useState<Tea[]>([]);
 
   useEffect(() => {
-    getTeas().then((res) => setTeaList(res.data as Tea[]));
-  }, []);
+    getTeas(userId).then((res) => setTeaList(res.data as Tea[]));
+  }, [userId]);
   return (
     <ul>
       {teaList.map((tea) => (

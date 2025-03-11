@@ -11,7 +11,7 @@ const RegisterTea: React.FC<RegisterTeaProps> = ({ onTeaRegistered }) => {
   const [source, setSource] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [isFormVisible, setIsFormVisible] = useState(false);
+  const [_, setIsFormVisible] = useState(false);
 
   const handleSubmit = async () => {
     if (!teaName.trim() || !provider.trim()) {
