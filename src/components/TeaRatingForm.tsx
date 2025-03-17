@@ -19,6 +19,7 @@ const TeaRatingForm: React.FC<TeaRatingFormProps> = ({
   const [teaId, setTeaId] = useState<number>(editingRating?.tea_id || 0);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [rating, setRating] = useState<Rating>(editingRating || {
     id: 0,
     user_id: 0,
@@ -34,7 +35,16 @@ const TeaRatingForm: React.FC<TeaRatingFormProps> = ({
   });
 
   useEffect(() => {
-    getTeas(userId).then((res) => setTeaList(res.data as Tea[]));
+    getTeas(userId)
+      .then((res) => {
+        setTeaList(res.data as Tea[]);
+        setLoadError(null);
+      })
+      .catch((err) => {
+        console.error('Error fetching teas:', err);
+        setLoadError('Failed to load teas');
+        setTeaList([]);
+      });
   }, [refreshTrigger, userId]);
 
   useEffect(() => {
@@ -162,7 +172,7 @@ const TeaRatingForm: React.FC<TeaRatingFormProps> = ({
           Rating {editingRating ? 'updated' : 'submitted'} successfully!
         </div>
       )}
-      {showError && (
+      {(showError || loadError) && (
         <div style={{
           backgroundColor: '#f8d7da',
           color: '#721c24',
@@ -171,7 +181,7 @@ const TeaRatingForm: React.FC<TeaRatingFormProps> = ({
           marginBottom: '1rem',
           textAlign: 'center'
         }}>
-          {teaId === 0 ? 'Please select a tea before submitting!' : 'Error submitting rating. Please try again.'}
+          {loadError || (teaId === 0 ? 'Please select a tea before submitting!' : 'Error submitting rating. Please try again.')}
         </div>
       )}
       <select 
@@ -190,11 +200,13 @@ const TeaRatingForm: React.FC<TeaRatingFormProps> = ({
         disabled={!!editingRating}
       >
         <option value="0">Select a Tea</option>
-        {teaList.map((tea) => (
-          <option key={tea.id} value={tea.id}>
-            {tea.tea_name}
-          </option>
-        ))}
+        {teaList && teaList.length > 0 ? (
+          teaList.map((tea) => (
+            <option key={tea.id} value={tea.id}>
+              {tea.tea_name}
+            </option>
+          ))
+        ) : null}
       </select>
 
       <div style={{ marginBottom: '2rem' }}>
