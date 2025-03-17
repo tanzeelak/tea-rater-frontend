@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { logoutUser, getUser } from '../services/api';
-import RegisterTea from './RegisterTea';
 
 interface NavbarProps {
   setToken: (token: string | null) => void;
   userId: number;
-  onTeaRegistered?: () => void;
+  onRegisterTeaClick: (isVisible: boolean) => void;
+  isFormVisible: boolean;
 }
 
 interface UserResponse {
   name: string;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ setToken, userId, onTeaRegistered }) => {
+const Navbar: React.FC<NavbarProps> = ({ setToken, userId, onRegisterTeaClick, isFormVisible }) => {
   const [username, setUsername] = useState<string>("");
-  const [isFormVisible, setIsFormVisible] = useState(false);
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -32,10 +31,12 @@ const Navbar: React.FC<NavbarProps> = ({ setToken, userId, onTeaRegistered }) =>
   const handleLogout = async () => {
     try {
       await logoutUser();
+    } catch (error) {
+      console.error('Error during logout:', error);
+    } finally {
+      // Always clear local storage and state, even if the API call fails
       localStorage.removeItem('authToken');
       setToken(null);
-    } catch (error) {
-      console.error('Logout failed:', error);
     }
   };
 
@@ -52,7 +53,7 @@ const Navbar: React.FC<NavbarProps> = ({ setToken, userId, onTeaRegistered }) =>
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
         <span style={{ color: '#666' }}>Welcome, <strong>{username}</strong>!</span>
         <button
-          onClick={() => setIsFormVisible(!isFormVisible)}
+          onClick={() => onRegisterTeaClick(!isFormVisible)}
           style={{
             padding: '0.5rem 1rem',
             backgroundColor: '#28a745',
@@ -78,10 +79,6 @@ const Navbar: React.FC<NavbarProps> = ({ setToken, userId, onTeaRegistered }) =>
           Logout
         </button>
       </div>
-      {isFormVisible && <RegisterTea onTeaRegistered={() => {
-        setIsFormVisible(false);
-        onTeaRegistered?.();
-      }} />}
     </nav>
   );
 };

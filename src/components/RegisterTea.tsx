@@ -11,7 +11,6 @@ const RegisterTea: React.FC<RegisterTeaProps> = ({ onTeaRegistered }) => {
   const [source, setSource] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [_, setIsFormVisible] = useState(false);
 
   const handleSubmit = async () => {
     if (!teaName.trim() || !provider.trim()) {
@@ -30,7 +29,6 @@ const RegisterTea: React.FC<RegisterTeaProps> = ({ onTeaRegistered }) => {
       
       setTimeout(() => {
         setShowSuccess(false);
-        setIsFormVisible(false);
       }, 3000);
     } catch (error) {
       console.error('Error registering tea:', error);
@@ -40,18 +38,8 @@ const RegisterTea: React.FC<RegisterTeaProps> = ({ onTeaRegistered }) => {
   };
 
   return (
-    <div style={{
-      position: 'absolute',
-      top: '100%',
-      right: '0',
-      marginTop: '0.5rem',
-      zIndex: 1000,
-      backgroundColor: 'white',
-      boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-      borderRadius: '4px',
-      padding: '1.5rem',
-      minWidth: '300px'
-    }}>
+    <div style={{ marginBottom: '2rem' }}>
+      <h2 style={{ marginTop: 0 }}>Register a New Tea</h2>
       {showSuccess && (
         <div style={{
           backgroundColor: '#d4edda',

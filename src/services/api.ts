@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:8080";
+const API_BASE_URL = "http://localhost:8080";
 
 export const loginUser = async (username: string) => {
   return axios.post(`${API_BASE_URL}/login`, { username });
@@ -14,8 +14,18 @@ export const registerUser = async (username: string) => {
   return axios.post(`${API_BASE_URL}/register-user`, { "name": username });
 };
 
-export const getTeas = (userId: number) => {
-  return axios.get(`${API_BASE_URL}/teas?user_id=${userId}`);
+export const getTeas = async (userId: number) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/teas?user_id=${userId}`);
+    console.log('Tea response:', response);
+    // Ensure we're returning an array
+    return {
+      data: Array.isArray(response.data) ? response.data : []
+    };
+  } catch (error) {
+    console.error('Error in getTeas:', error);
+    return { data: [] };
+  }
 };
 
 export const registerTea = async (teaName: string, provider: string) => {
@@ -27,8 +37,17 @@ export const getRatings = async () => {
 };
 
 export const getUserRatings = async (userId: number) => {
-    console.log(userId);
-    return axios.get(`${API_BASE_URL}/user-ratings/${userId}`);
+  try {
+    const response = await axios.get(`${API_BASE_URL}/user-ratings/${userId}`);
+    console.log('Ratings response:', response);
+    // Ensure we're returning an array
+    return {
+      data: Array.isArray(response.data) ? response.data : []
+    };
+  } catch (error) {
+    console.error('Error in getUserRatings:', error);
+    return { data: [] };
+  }
 };
 
 export const getUser = async (userId: number) => {
