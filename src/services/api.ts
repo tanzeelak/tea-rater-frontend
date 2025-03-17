@@ -2,8 +2,11 @@ import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
 
+// Configure axios defaults
+axios.defaults.headers.common['Content-Type'] = 'application/json';
+
 export const loginUser = async (username: string) => {
-  return axios.post(`${API_BASE_URL}/login`, { "name": username });
+  return axios.post(`${API_BASE_URL}/login`, { name: username });
 };
 
 export const logoutUser = async () => {
@@ -11,7 +14,7 @@ export const logoutUser = async () => {
 };
 
 export const registerUser = async (username: string) => {
-  return axios.post(`${API_BASE_URL}/register-user`, { "name": username });
+  return axios.post(`${API_BASE_URL}/register-user`, { name: username });
 };
 
 export const getTeas = async (userId: number) => {
