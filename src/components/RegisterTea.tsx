@@ -11,27 +11,34 @@ const RegisterTea: React.FC<RegisterTeaProps> = ({ onTeaRegistered }) => {
   const [source, setSource] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async () => {
     if (!teaName.trim() || !provider.trim()) {
+      setErrorMessage('Please fill in Tea Name and Provider (Source is optional)');
       setShowError(true);
       setTimeout(() => setShowError(false), 3000);
       return;
     }
 
     try {
-      await registerTea(teaName, provider);
+      await registerTea(teaName, provider, source);
       setShowSuccess(true);
       setTeaName('');
       setProvider('');
       setSource('');
       onTeaRegistered();
-      
+
       setTimeout(() => {
         setShowSuccess(false);
-      }, 3000);
-    } catch (error) {
+      }, 2000);
+    } catch (error: any) {
       console.error('Error registering tea:', error);
+      if (error.response?.status === 409) {
+        setErrorMessage('Tea already exists with this name and provider');
+      } else {
+        setErrorMessage(error.response?.data || 'Failed to register tea. Please try again.');
+      }
       setShowError(true);
       setTimeout(() => setShowError(false), 3000);
     }
@@ -61,7 +68,7 @@ const RegisterTea: React.FC<RegisterTeaProps> = ({ onTeaRegistered }) => {
           marginBottom: '1rem',
           textAlign: 'center'
         }}>
-          Please fill in all fields
+          {errorMessage}
         </div>
       )}
       <div style={{ marginBottom: '1rem' }}>
@@ -79,7 +86,7 @@ const RegisterTea: React.FC<RegisterTeaProps> = ({ onTeaRegistered }) => {
         />
       </div>
       <div style={{ marginBottom: '1rem' }}>
-        <label style={{ display: 'block', marginBottom: '0.5rem' }}>Source:</label>
+        <label style={{ display: 'block', marginBottom: '0.5rem' }}>Source (optional):</label>
         <input
           type="text"
           value={source}
@@ -124,4 +131,4 @@ const RegisterTea: React.FC<RegisterTeaProps> = ({ onTeaRegistered }) => {
   );
 };
 
-export default RegisterTea; 
+export default RegisterTea;

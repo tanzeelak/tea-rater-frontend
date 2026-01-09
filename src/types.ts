@@ -2,6 +2,7 @@ export interface Rating {
     id: number;
     user_id: number;
     tea_id: number;
+    tasting_id: number;
     umami: number;
     astringency: number;
     floral: number;
@@ -17,4 +18,8 @@ export interface Tea {
     tea_name: string;
     provider: string;
 }
-  
+
+export interface TeaTasting {
+    id: number;
+    name: string;
+}

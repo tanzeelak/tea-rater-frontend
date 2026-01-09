@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { logoutUser, getUser } from '../services/api';
+import RegisterTea from './RegisterTea';
 
 interface NavbarProps {
   setToken: (token: string | null) => void;
   userId: number;
-  onRegisterTeaClick: (isVisible: boolean) => void;
-  isFormVisible: boolean;
+  onTeaRegistered?: () => void;
 }
 
 interface UserResponse {
   name: string;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ setToken, userId, onRegisterTeaClick, isFormVisible }) => {
+const Navbar: React.FC<NavbarProps> = ({ setToken, userId, onTeaRegistered }) => {
   const [username, setUsername] = useState<string>("");
+  const [isFormVisible, setIsFormVisible] = useState(false);
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -52,19 +53,25 @@ const Navbar: React.FC<NavbarProps> = ({ setToken, userId, onRegisterTeaClick, i
       <h1 style={{ margin: 0 }}>Tea Rater</h1>
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
         <span style={{ color: '#666' }}>Welcome, <strong>{username}</strong>!</span>
-        <button
-          onClick={() => onRegisterTeaClick(!isFormVisible)}
-          style={{
-            padding: '0.5rem 1rem',
-            backgroundColor: '#28a745',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}
-        >
-          {isFormVisible ? 'Hide Tea Registration' : 'Register New Tea'}
-        </button>
+        <div style={{ position: 'relative' }}>
+          <button
+            onClick={() => setIsFormVisible(!isFormVisible)}
+            style={{
+              padding: '0.5rem 1rem',
+              backgroundColor: '#28a745',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            {isFormVisible ? 'Hide Tea Registration' : 'Register New Tea'}
+          </button>
+          {isFormVisible && <RegisterTea onTeaRegistered={() => {
+            setIsFormVisible(false);
+            onTeaRegistered?.();
+          }} />}
+        </div>
         <button
           onClick={handleLogout}
           style={{
@@ -83,4 +90,4 @@ const Navbar: React.FC<NavbarProps> = ({ setToken, userId, onRegisterTeaClick, i
   );
 };
 
-export default Navbar; 
+export default Navbar;
