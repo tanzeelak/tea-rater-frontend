@@ -19,7 +19,7 @@ const Register: React.FC<RegisterProps> = ({ setToken }) => {
             navigate("/"); // Redirect to home after successful registration
         }
     } catch (error) {
-      alert("Registration failed!");
+      alert("Registration failed! " + (error as Error).message);
     }
   };
 
