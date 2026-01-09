@@ -239,22 +239,20 @@ const Home: React.FC = () => {
         <section style={{ marginBottom: '3rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
             <h2 style={{ margin: 0, color: '#4a5568' }}>Your Tea Flights</h2>
-            {availableTeas.length > 0 && (
-              <button
-                onClick={() => setShowNewFlight(true)}
-                style={{
-                  backgroundColor: '#48bb78',
-                  color: 'white',
-                  border: 'none',
-                  padding: '0.75rem 1.5rem',
-                  borderRadius: '8px',
-                  fontWeight: 'bold',
-                  cursor: 'pointer'
-                }}
-              >
-                + Create New Flight
-              </button>
-            )}
+            <button
+              onClick={() => setShowNewFlight(true)}
+              style={{
+                backgroundColor: '#48bb78',
+                color: 'white',
+                border: 'none',
+                padding: '0.75rem 1.5rem',
+                borderRadius: '8px',
+                fontWeight: 'bold',
+                cursor: 'pointer'
+              }}
+            >
+              + Create New Flight
+            </button>
           </div>
           <div style={{
             display: 'grid',
@@ -576,78 +574,88 @@ const NewFlightCreator: React.FC<{
         />
       </div>
 
-      <div style={{ marginBottom: '2rem' }}>
-        <h3 style={{ marginBottom: '1rem', color: '#4a5568' }}>
-          Selected Teas ({selectedTeas.length})
-        </h3>
-        <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '0.5rem',
-          marginBottom: '1rem'
-        }}>
-          {selectedTeas.map((tea) => (
-            <span
-              key={tea.id}
-              style={{
-                backgroundColor: '#4299e1',
-                color: 'white',
-                padding: '0.5rem 1rem',
-                borderRadius: '20px',
-                fontSize: '0.875rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}
-            >
-              {tea.display}
-              <button
-                onClick={() => handleTeaRemove(tea)}
+      {availableTeas.length > 0 && (
+        <div style={{ marginBottom: '2rem' }}>
+          <h3 style={{ marginBottom: '1rem', color: '#4a5568' }}>
+            Selected Teas ({selectedTeas.length})
+          </h3>
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '0.5rem',
+            marginBottom: '1rem'
+          }}>
+            {selectedTeas.map((tea) => (
+              <span
+                key={tea.id}
                 style={{
-                  background: 'none',
-                  border: 'none',
+                  backgroundColor: '#4299e1',
                   color: 'white',
-                  cursor: 'pointer',
-                  fontSize: '1rem'
+                  padding: '0.5rem 1rem',
+                  borderRadius: '20px',
+                  fontSize: '0.875rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
                 }}
               >
-                ×
-              </button>
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <div style={{ marginBottom: '2rem' }}>
-        <h3 style={{ marginBottom: '1rem', color: '#4a5568' }}>Available Teas</h3>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-          gap: '1rem'
-        }}>
-          {availableTeas.map((tea) => (
-            <div
-              key={tea.id}
-              onClick={() => handleTeaSelect(tea)}
-              style={{
-                backgroundColor: selectedTeas.find(t => t.id === tea.id) ? '#edf2f7' : 'white',
-                border: selectedTeas.find(t => t.id === tea.id) ? '2px solid #4299e1' : '1px solid #e2e8f0',
-                borderRadius: '8px',
-                padding: '1rem',
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-              }}
-            >
-              <h4 style={{ margin: '0 0 0.25rem 0', color: '#2d3748' }}>
                 {tea.display}
-              </h4>
-              <p style={{ margin: 0, fontSize: '0.875rem', color: '#718096' }}>
-                {tea.provider}
-              </p>
-            </div>
-          ))}
+                <button
+                  onClick={() => handleTeaRemove(tea)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'white',
+                    cursor: 'pointer',
+                    fontSize: '1rem'
+                  }}
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {availableTeas.length > 0 ? (
+        <div style={{ marginBottom: '2rem' }}>
+          <h3 style={{ marginBottom: '1rem', color: '#4a5568' }}>Available Teas</h3>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+            gap: '1rem'
+          }}>
+            {availableTeas.map((tea) => (
+              <div
+                key={tea.id}
+                onClick={() => handleTeaSelect(tea)}
+                style={{
+                  backgroundColor: selectedTeas.find(t => t.id === tea.id) ? '#edf2f7' : 'white',
+                  border: selectedTeas.find(t => t.id === tea.id) ? '2px solid #4299e1' : '1px solid #e2e8f0',
+                  borderRadius: '8px',
+                  padding: '1rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+              >
+                <h4 style={{ margin: '0 0 0.25rem 0', color: '#2d3748' }}>
+                  {tea.display}
+                </h4>
+                <p style={{ margin: 0, fontSize: '0.875rem', color: '#718096' }}>
+                  {tea.provider}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div style={{ marginBottom: '2rem', padding: '1rem', backgroundColor: '#f7fafc', borderRadius: '8px' }}>
+          <p style={{ margin: 0, color: '#718096', textAlign: 'center' }}>
+            No teas registered yet. You can create an empty flight and add teas later.
+          </p>
+        </div>
+      )}
 
       <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
         {selectedTeas.length > 0 && (
